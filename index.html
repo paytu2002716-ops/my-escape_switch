@@ -1,0 +1,156 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Light Bulb Toggle</title>
+    <!-- Load Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    <script>
+        tailwind.config = {
+            theme: {
+                extend: {
+                    fontFamily: {
+                        sans: ['Inter', 'sans-serif'],
+                    },
+                }
+            }
+        }
+    </script>
+    <style>
+        /* Custom bulb styling for the glowing effect */
+        .bulb-off {
+            background-color: #6b7280; /* Gray-500 */
+            box-shadow: 0 0 5px rgba(0, 0, 0, 0.5);
+            transition: all 0.5s ease-in-out;
+        }
+
+        .bulb-on {
+            background-color: #fcd34d; /* Amber-300 */
+            /* Add a strong, realistic glowing shadow when on */
+            box-shadow: 0 0 40px #fcd34d, 0 0 80px #fcd34d, 0 0 120px #fcd34d;
+            transition: all 0.5s ease-in-out;
+        }
+
+        /* Responsive scaling for the bulb */
+        .bulb-container {
+            width: 150px;
+            height: 150px;
+        }
+        @media (min-width: 640px) {
+            .bulb-container {
+                width: 200px;
+                height: 200px;
+            }
+        }
+    </style>
+</head>
+<body class="font-sans min-h-screen transition-colors duration-500 flex flex-col items-center justify-center bg-gray-900" id="body-container">
+
+    <div class="p-8 rounded-xl shadow-2xl transition-all duration-500 w-11/12 max-w-sm" id="card-container">
+        <h1 class="text-3xl font-bold text-center mb-10 text-white" id="title-text">
+            Toggle the Light
+        </h1>
+
+        <!-- The Bulb Visualization -->
+        <div class="flex flex-col items-center mb-12">
+            <!-- Filament holder / base -->
+            <div class="w-10 h-6 bg-gray-500 rounded-b-lg"></div>
+            <!-- The Bulb itself -->
+            <div class="bulb-container rounded-full bulb-off transform scale-100 mb-4" id="light-bulb"></div>
+            <!-- Power cord detail -->
+            <div class="w-1 h-12 bg-gray-700"></div>
+        </div>
+
+        <!-- The Toggle Button -->
+        <button
+            id="toggle-button"
+            class="w-full py-3 px-6 bg-green-600 hover:bg-green-700 text-white font-semibold rounded-lg shadow-lg transition duration-300 transform hover:scale-[1.02] active:scale-[0.98] focus:outline-none focus:ring-4 focus:ring-green-500/50"
+            role="button"
+            aria-label="Toggle Light"
+        >
+            Turn On
+        </button>
+
+        <p class="text-center text-sm mt-6 text-gray-500" id="status-text">The light is currently **OFF**.</p>
+    </div>
+
+    <script>
+        // References to DOM elements
+        const bulb = document.getElementById('light-bulb');
+        const button = document.getElementById('toggle-button');
+        const body = document.getElementById('body-container');
+        const card = document.getElementById('card-container');
+        const title = document.getElementById('title-text');
+        const statusText = document.getElementById('status-text');
+
+        // State variable
+        let isLightOn = false;
+
+        /**
+         * Toggles the light bulb state and updates the UI accordingly.
+         */
+        function toggleLight() {
+            isLightOn = !isLightOn;
+
+            if (isLightOn) {
+                // Change UI to ON state
+                bulb.classList.remove('bulb-off');
+                bulb.classList.add('bulb-on');
+
+                button.textContent = 'Turn Off';
+                button.classList.remove('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500/50');
+                button.classList.add('bg-red-600', 'hover:bg-red-700', 'focus:ring-red-500/50');
+
+                // Page background and text for "ON" mode
+                body.classList.remove('bg-gray-900');
+                body.classList.add('bg-amber-100');
+
+                card.classList.remove('bg-gray-800');
+                card.classList.add('bg-white');
+                card.classList.add('shadow-xl');
+
+                title.classList.remove('text-white');
+                title.classList.add('text-gray-900');
+
+                statusText.innerHTML = 'The light is currently <span class="text-green-600 font-bold">ON</span>.';
+                statusText.classList.remove('text-gray-500');
+                statusText.classList.add('text-gray-700');
+
+
+            } else {
+                // Change UI to OFF state
+                bulb.classList.remove('bulb-on');
+                bulb.classList.add('bulb-off');
+
+                button.textContent = 'Turn On';
+                button.classList.remove('bg-red-600', 'hover:bg-red-700', 'focus:ring-red-500/50');
+                button.classList.add('bg-green-600', 'hover:bg-green-700', 'focus:ring-green-500/50');
+
+                // Page background and text for "OFF" mode
+                body.classList.remove('bg-amber-100');
+                body.classList.add('bg-gray-900');
+
+                card.classList.remove('bg-white');
+                card.classList.add('bg-gray-800');
+
+                title.classList.remove('text-gray-900');
+                title.classList.add('text-white');
+
+                statusText.innerHTML = 'The light is currently <span class="text-red-600 font-bold">OFF</span>.';
+                statusText.classList.remove('text-gray-700');
+                statusText.classList.add('text-gray-500');
+            }
+        }
+
+        // Attach the event listener to the button
+        button.addEventListener('click', toggleLight);
+
+        // Initial setup for the card background (can be customized)
+        window.onload = () => {
+             card.classList.add('bg-gray-800');
+        };
+
+    </script>
+</body>
+</html>
